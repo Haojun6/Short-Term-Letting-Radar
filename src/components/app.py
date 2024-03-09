@@ -29,5 +29,33 @@ def get_locations():
     return jsonify(data)
 
 
+@app.route('/statistics', methods=['GET'])
+def statistics():
+    fetched_data = listings.find({}, {'_id': 0, 'room_type': 1, 'name': 1, 'host_name': 1, 'price': 1})
+    data = []
+    for listing in fetched_data:
+        price = listing.get('price')
+        host_name = listing.get('host_name')
+        if (price is not None and not (isinstance(price, float) and math.isnan(price))) and (
+                host_name is not None and not (isinstance(host_name, float) and math.isnan(host_name))):
+            data.append(listing)
+
+    total_listings = len(data)
+    entire_home = 0
+    totalPrice = 0
+    for i in data:
+        if i['room_type'] == 'Entire home/apt':
+            entire_home += 1
+        totalPrice += float(i['price'][1:].replace(',', ''))
+    percentage_entire_home = round(entire_home / total_listings * 100, 2) if total_listings else 0
+    avg_price = int(totalPrice / total_listings)
+    stats = {
+        'total_listings': total_listings,
+        'average_price': avg_price,
+        'percentage_entire_home': percentage_entire_home
+    }
+    return jsonify(stats)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
