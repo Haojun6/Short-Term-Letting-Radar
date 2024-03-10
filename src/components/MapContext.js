@@ -14,7 +14,6 @@ export const MapProvider = ({ children }) => {
   const onSearch = async (query) => {
     // Fuzzy search implementation or integration with a geocoding service
     // For simplicity, this example uses the Mapbox Geocoding API directly
-
     const geocodingUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?access_token=${mapboxgl.accessToken}`;
 
     try {
@@ -28,7 +27,7 @@ export const MapProvider = ({ children }) => {
           map.flyTo({
             center: [longitude, latitude],
             essential: true,
-            zoom: 15
+            zoom: 10
           });
         }
       } else {

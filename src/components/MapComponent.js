@@ -15,8 +15,8 @@ const MapComponent = () => {
   useEffect(() => {
     const initializeMap = new mapboxgl.Map({
       container: 'map', // container ID
-      style: 'mapbox://styles/hxing/cltgc43kb002k01pjhntfgflz', // style URL
-      center: [-6.2603, 53.3498], // starting position [lng, lat]
+      style: 'mapbox://styles/hxing/cltlov0ke009601qo9sg89dz1', // style URL
+      center: [0, 0], // starting position [lng, lat]
       zoom: 10 // starting zoom
     });
 
@@ -105,7 +105,7 @@ const MapComponent = () => {
   }, [map]); // Re-run this effect if the map instance changes
 
   return (
-    <div id="map" style={{ width: '100%', height: '500px' }}>
+    <div id="map" style={{ width: '70%', height: '500px' }}>
 
     </div>
   );
