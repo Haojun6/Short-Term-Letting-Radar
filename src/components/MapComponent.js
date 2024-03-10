@@ -10,65 +10,13 @@ const MapComponent = () => {
    const { map, setMap } = useMapContext();
   const navigate = useNavigate();
 
-  const handleStyleLoad = () => {
-  console.log("Style loaded, attempting to re-add sources and layers");
-
-  if (!map) {
-    console.error("Map instance is not available");
-    return;
-  }
-
-  const geoJsonData = {
-    type: 'FeatureCollection',
-    features: [
-      // Example feature, replace with your actual data structure
-      {
-        type: 'Feature',
-        properties: {
-          room_type: 'Entire home/apt', // Example property
-        },
-        geometry: {
-          type: 'Point',
-          coordinates: [-74.006, 40.7128], // Example coordinates
-        },
-      },
-    ],
-  };
-
-  if (!map.getSource('locations')) {
-    map.addSource('locations', { type: 'geojson', data: geoJsonData });
-    console.log("Source added");
-  } else {
-    // Update source data if it already exists
-    map.getSource('locations').setData(geoJsonData);
-    console.log("Source updated");
-  }
-
-  if (!map.getLayer('locations')) {
-    map.addLayer({
-      id: 'locations',
-      type: 'symbol',
-      source: 'locations',
-      layout: {
-        'icon-image': 'home', // Use a simple icon for testing
-        'icon-size': 1.5,
-      },
-    });
-    console.log("Layer added");
-  } else {
-    console.log("Layer already exists");
-  }
-};
-
-
-
 
 
   useEffect(() => {
     const initializeMap = new mapboxgl.Map({
       container: 'map', // container ID
-      style: 'mapbox://styles/hxing/cltlov0ke009601qo9sg89dz1', // style URL
-      center: [0, 10], // starting position [lng, lat]
+      style: 'mapbox://styles/hxing/cltgc43kb002k01pjhntfgflz', // style URL
+      center: [-6.2603, 53.3498], // starting position [lng, lat]
       zoom: 10 // starting zoom
     });
 
@@ -155,18 +103,6 @@ const MapComponent = () => {
       })
       .catch(error => console.error('Failed to fetch', error));
   }, [map]); // Re-run this effect if the map instance changes
-
-  useEffect(() => {
-  if (!map) return;
-
-  map.on('style.load', handleStyleLoad);
-
-  // Cleanup the event listener when the component unmounts or the map instance changes
-  return () => {
-    map.off('style.load', handleStyleLoad);
-  };
-}, [map]); // Dependencies array includes `map` to re-bind the event listener if the map instance changes
-
 
   return (
     <div id="map" style={{ width: '100%', height: '500px' }}>
