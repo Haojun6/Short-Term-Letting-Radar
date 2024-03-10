@@ -3,44 +3,72 @@ import { useNavigate } from 'react-router-dom';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import SearchBar from './SearchBar';
-
+import { useMapContext } from './MapContext';
 mapboxgl.accessToken = 'pk.eyJ1IjoiaHhpbmciLCJhIjoiY2x0YzFkMWk4MW53bjJqcXJqYzZ0N2l4ZSJ9.1j0iCy5UAqAmhs5mfqZ38w';
 
 const MapComponent = () => {
-  const [map, setMap] = useState(null);
+   const { map, setMap } = useMapContext();
   const navigate = useNavigate();
 
-  const onSearch = async (query) => {
-  const geocodingUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?access_token=${mapboxgl.accessToken}`;
+  const handleStyleLoad = () => {
+  console.log("Style loaded, attempting to re-add sources and layers");
 
-  try {
-    const response = await fetch(geocodingUrl);
-    const data = await response.json();
+  if (!map) {
+    console.error("Map instance is not available");
+    return;
+  }
 
-    if (data.features && data.features.length > 0) {
-      // Assuming you want to use the first result
-      const [longitude, latitude] = data.features[0].center;
+  const geoJsonData = {
+    type: 'FeatureCollection',
+    features: [
+      // Example feature, replace with your actual data structure
+      {
+        type: 'Feature',
+        properties: {
+          room_type: 'Entire home/apt', // Example property
+        },
+        geometry: {
+          type: 'Point',
+          coordinates: [-74.006, 40.7128], // Example coordinates
+        },
+      },
+    ],
+  };
 
-      // Update your map to the searched location
-      // Assume map is your Mapbox map instance
-      map.flyTo({
-        center: [longitude, latitude],
-        essential: true, // this animation is considered essential with respect to prefers-reduced-motion
-        zoom: 15 // Adjust zoom level as needed
-      });
-    } else {
-      console.log('No results found');
-    }
-  } catch (error) {
-    console.error('Error searching for location:', error);
+  if (!map.getSource('locations')) {
+    map.addSource('locations', { type: 'geojson', data: geoJsonData });
+    console.log("Source added");
+  } else {
+    // Update source data if it already exists
+    map.getSource('locations').setData(geoJsonData);
+    console.log("Source updated");
+  }
+
+  if (!map.getLayer('locations')) {
+    map.addLayer({
+      id: 'locations',
+      type: 'symbol',
+      source: 'locations',
+      layout: {
+        'icon-image': 'home', // Use a simple icon for testing
+        'icon-size': 1.5,
+      },
+    });
+    console.log("Layer added");
+  } else {
+    console.log("Layer already exists");
   }
 };
+
+
+
+
 
   useEffect(() => {
     const initializeMap = new mapboxgl.Map({
       container: 'map', // container ID
-      style: 'mapbox://styles/hxing/cltgc43kb002k01pjhntfgflz', // style URL
-      center: [-6.2603, 53.3498], // starting position [lng, lat]
+      style: 'mapbox://styles/hxing/cltlov0ke009601qo9sg89dz1', // style URL
+      center: [0, 10], // starting position [lng, lat]
       zoom: 10 // starting zoom
     });
 
@@ -128,11 +156,21 @@ const MapComponent = () => {
       .catch(error => console.error('Failed to fetch', error));
   }, [map]); // Re-run this effect if the map instance changes
 
+  useEffect(() => {
+  if (!map) return;
+
+  map.on('style.load', handleStyleLoad);
+
+  // Cleanup the event listener when the component unmounts or the map instance changes
+  return () => {
+    map.off('style.load', handleStyleLoad);
+  };
+}, [map]); // Dependencies array includes `map` to re-bind the event listener if the map instance changes
+
+
   return (
     <div id="map" style={{ width: '100%', height: '500px' }}>
-      <div>
-          <SearchBar onSearch={onSearch} />
-      </div>
+
     </div>
   );
 };
