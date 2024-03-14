@@ -1,0 +1,69 @@
+.statistics-container {
+  font-family: 'Arial', sans-serif;
+  margin-right: 20px;
+  margin-top: 20px;
+}
+
+.filter-section {
+  margin-bottom: 20px;
+}
+
+.filter-dropdown select {
+  padding: 5px;
+  margin-left: 10px;
+}
+
+.stats-section {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-left: 20px;
+}
+
+.total-listings {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  padding: 10px 100px;
+}
+
+.room-type-section
+/* Add classes for other statistic types as needed */ {
+  margin-bottom: 20px;
+}
+
+.rent-pressure-bar, .room-type-bar, .illegal-total-bar, .illegal-rpz-bar
+/* Add classes for bars for other statistic types as needed */ {
+  background-color: #f4f4f4;
+  position: relative;
+  height: 20px;
+  margin-bottom: 10px;
+}
+
+.bar {
+  background-color: #FF5A5F; /* Airbnb red color */
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: width 0.5s ease;
+}
+
+.percentage {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  font-weight: bold;
+}
+
+.room-type-label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.total-number{
+  text-align: center;
+}
