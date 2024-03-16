@@ -13,11 +13,25 @@ mongo_connection_string = 'mongodb+srv://shorttermlettingradar.dvmzgjp.mongodb.n
 client = MongoClient(mongo_connection_string, tls=True, tlsCertificateKeyFile=cert_path)
 db = client.ShortTermLettingRadar
 listings = db.listings
+RPZs = ['Cork','Bandon','Bantry','Carrigaline','Fermoy','Kanturk','Mallow','Midleton','Skibbereen','Blackrock','Dundrum'
+    ,'Glencullen','Killiney','Stillorgan','Balbriggan','Blanchardstown','Castleknock','Howth','Ongar','Rush','Swords'
+    ,'Clondalkin','Firhouse','Lucan','Palmerstown','Rathfarnham','Tallaght','Kinnegad','Moate','Mullingar','Athy','Celbridge'
+    ,'Clane','Newbridge','Dungarvan','Lismore','v','Callan','Castlecomer','Piltown','Adare','Cappamore','Newcastle'
+    ,'Artane-Whitehall','Ballyfermot-Drimnagh','Ballymun-Finglas','Cabra-Glasnevin','Clontarf','Donaghmede','Kimmage-Rathmines'
+    ,'North Inner City','Pembroke','South East Inner City','South West Inner City','Dún Laoghaire','Fingal','Galway'
+    ,'Celbridge','Carrigaline','Naas','Leixlip','Ashbourne','Laytown','Bettystown','Rathoath','Bray','Wicklow','Cobh'
+    ,'Maynooth','Drogheda','Greystones','Limerick','Navan','Fermoy','Midleton','Athenry','Oranmore','Gort','Kinvara','Kilkenny'
+    ,'Graiguecullen','Portarlington','Portlaoise','Ardee','Dundalk','Carlingford','Kells','Trim','Waterford','Athlone','Gorey'
+    ,'Arklow','Carlow','Macroom','Piltown','Sligo','Baltinglass','Mallow','Athy','Tullamore','Mullingar','Bandon','Kinsale'
+    ,'Kildare','Westport','Ennis','Shannon']
+
+
+
 
 
 @app.route('/getLocations', methods=['GET'])
 def get_locations():
-    fetched_data = listings.find({}, {'_id': 0, 'latitude': 1, 'longitude': 1, 'room_type': 1, 'id': 1, 'name': 1, 'host_name': 1, 'price': 1})
+    fetched_data = listings.find({}, {'_id': 0, 'latitude': 1, 'longitude': 1, 'room_type': 1, 'id': 1, 'name': 1, 'host_name': 1, 'price': 1, 'region_name': 1})
 
     # Filter out listings with NaN price
     data = []
@@ -26,6 +40,12 @@ def get_locations():
         listing['id'] = str(id)
         price = listing.get('price')
         host_name = listing.get('host_name')
+        region = listing.get('region_name')
+        if any(r in region for r in RPZs):
+            listing['rpz'] = 'Yes'
+
+        else:
+            listing['rpz'] = 'No'
         if (price is not None and not (isinstance(price, float) and math.isnan(price))) and (host_name is not None and not (isinstance(host_name, float) and math.isnan(host_name))):
             data.append(listing)
     return jsonify(data)
