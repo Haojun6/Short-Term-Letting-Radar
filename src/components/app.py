@@ -22,6 +22,8 @@ def get_locations():
     # Filter out listings with NaN price
     data = []
     for listing in fetched_data:
+        id = listing.get('id')
+        listing['id'] = str(id)
         price = listing.get('price')
         host_name = listing.get('host_name')
         if (price is not None and not (isinstance(price, float) and math.isnan(price))) and (host_name is not None and not (isinstance(host_name, float) and math.isnan(host_name))):
@@ -55,6 +57,15 @@ def statistics():
         'percentage_entire_home': percentage_entire_home
     }
     return jsonify(stats)
+
+@app.route('/getListingDetails/<listing_id>', methods=['GET'])
+def get_listing_details(listing_id):
+    listing = listings.find_one({"id": int(listing_id)}, {'_id': 0, 'latitude': 1, 'longitude': 1, 'room_type': 1, 'id': 1, 'name': 1, 'host_name': 1, 'price': 1, 'picture_url': 1})
+    if listing:
+        return jsonify(listing)
+    else:
+        return jsonify({"error": "Listing not found"}), 404
+
 
 
 if __name__ == '__main__':
