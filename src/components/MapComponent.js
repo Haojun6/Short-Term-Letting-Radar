@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import SearchBar from './SearchBar';
+import './MapComponent.css';
 import { useMapContext } from './MapContext';
 mapboxgl.accessToken = 'pk.eyJ1IjoiaHhpbmciLCJhIjoiY2x0YzFkMWk4MW53bjJqcXJqYzZ0N2l4ZSJ9.1j0iCy5UAqAmhs5mfqZ38w';
 
@@ -14,10 +15,10 @@ const MapComponent = () => {
 
   useEffect(() => {
     const initializeMap = new mapboxgl.Map({
-      container: 'map', // container ID
-      style: 'mapbox://styles/hxing/cltlov0ke009601qo9sg89dz1', // style URL
-      center: [0, 0], // starting position [lng, lat]
-      zoom: 10 // starting zoom
+      container: 'map',
+      style: 'mapbox://styles/hxing/cltlov0ke009601qo9sg89dz1',
+      center: [-8.604,53.440],
+      zoom: 6 // starting zoom
     });
 
     initializeMap.on('load', () => {
@@ -41,6 +42,9 @@ const MapComponent = () => {
               price: item.price,
               room_type: item.room_type,
               host_name: item.host_name,
+              region_name: item.region_name,
+              rpz: item.rpz,
+              illegal: item.illegal,
             },
             geometry: {
               type: 'Point',
@@ -55,14 +59,18 @@ const MapComponent = () => {
           type: 'symbol',
           source: 'locations',
           layout: {
-            'icon-image': [
-              'match',
-              ['get', 'room_type'],
-              'Entire home/apt', 'home', // Example: 'home-15' is a Maki icon
-              'home1' // Default to 'star-15' for others. Make sure to choose icons that exist in your Mapbox style or are generally available
-            ],
-            'icon-size': 1 // Adjust the size as necessary
-          }
+    'icon-image': [
+      'match',
+      ['get', 'illegal'], // Check the 'illegal' property
+      'Yes', 'caution', // If 'illegal' is 'Yes', use the 'cross' icon
+      ['match', // Nested match for other conditions
+        ['get', 'rpz'], // Now check the 'rpz' property
+        'Yes', 'home1', // If 'rpz' is 'Yes', use the 'ranger-station' icon
+        'home2' // Default icon if neither 'illegal' nor 'rpz' is 'Yes'
+      ]
+    ],
+    'icon-size': 1
+  }
         });
 
         const popup = new mapboxgl.Popup({
@@ -73,12 +81,13 @@ const MapComponent = () => {
         map.on('mouseenter', 'locations', (e) => {
           map.getCanvas().style.cursor = 'pointer';
           const coordinates = e.features[0].geometry.coordinates.slice();
-          const { id, name, price, host_name,room_type } = e.features[0].properties;
-          const description = `<strong>${name}</strong><p>Price: ${price}<br>Type: ${room_type}<br>Host: ${host_name}</p>`;
-          console.log(id)
-          // Ensure that if the map is zoomed out such that multiple
-          // copies of the feature are visible, the popup appears
-          // over the copy being pointed to.
+          const { id, name, price, host_name, room_type, rpz, illegal } = e.features[0].properties;
+          const description = `<div className={"description"}><strong>${name}</strong>
+                                                              <p>Price: ${price}<br>
+                                                              Type: ${room_type}<br>
+                                                              Host: ${host_name}<br>
+                                                              RPZ: ${rpz}<br>
+                                                              Potential Illegal: ${illegal}</p></div>`;
           while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
             coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
           }
@@ -105,8 +114,7 @@ const MapComponent = () => {
   }, [map]); // Re-run this effect if the map instance changes
 
   return (
-    <div id="map" style={{ width: '70%', height: '500px' }}>
-
+    <div className={"map"} id="map" style={{ width: '70%', height: '530px', marginTop: 100, marginLeft: -290, borderRadius: 20, }}>
     </div>
   );
 };

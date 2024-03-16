@@ -1,0 +1,39 @@
+.search-button {
+  display: inline-block;
+  color: white;
+  border: none;
+  padding: 18px 15px;
+  margin: 0 auto;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: dodgerblue;
+  transition: background-color 0.3s;
+  transition: transform 0.3s ease;
+  font-size: larger;
+}
+
+.search-button:hover {
+  background-color: #61dafb;
+  transform: scale(1.1);
+}
+
+.search-button:not(:hover) {
+  transform: scale(1);
+}
+
+.search-bar {
+  background-color: white;
+  border: none;
+  padding: 3px 115px;
+  margin: 0 auto;
+  border-radius: 5px;
+  font-size: larger;
+  box-shadow: 0 1px 5px black;
+}
+
+.search-section{
+  white-space: nowrap;
+  position: relative;
+  left: 50px;
+  top: 15px;
+}

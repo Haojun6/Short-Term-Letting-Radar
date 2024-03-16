@@ -1,0 +1,46 @@
+/* Assuming this is in your main CSS file */
+.body {
+  font-family: 'Arial', sans-serif;
+  background-color: #ebf7fa;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center the title and image */
+  padding: 20px;
+  background-color: #0077B6; /* Adjust based on your preference */
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  white-space: nowrap;
+  text-shadow: 0 0px 9px midnightblue;
+  font-weight: normal;
+  font-size: 40px;
+  font-family: "Arial", sans-serif; /* Updated for consistency */
+  margin-right: 15px; /* Space between title and image */
+}
+
+.img {
+  width: 50px;
+  height: auto;
+  border-radius: 25px; /* Adjust for a slightly rounded look */
+  box-shadow: 0 0px 9px midnightblue;
+}
+
+/* Additional styles for SearchBar, MapComponent, and StatisticsComponent */
+.search-bar, .map-component, .statistics-component {
+  padding: 20px;
+  margin: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+.statistics-component {
+  width: 300px;
+  flex-grow: 0;
+  margin-left: auto; /* Pushes the statistics component to the right */
+}

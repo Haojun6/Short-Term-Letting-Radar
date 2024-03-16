@@ -1,0 +1,12 @@
+.map{
+    width: 70%;
+    height: 530px;
+    marginTop: 100;
+    marginLeft: -290;
+    borderRadius: 20;
+    box-shadow: 0 1px 5px black;
+}
+
+.description{
+    background-color: #FF5A5F;
+}
