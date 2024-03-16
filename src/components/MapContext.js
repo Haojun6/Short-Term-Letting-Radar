@@ -1,4 +1,3 @@
-// MapContext.js
 import React, { createContext, useContext, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 

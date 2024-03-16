@@ -1,6 +1,6 @@
-// SearchBar.js
 import React, { useState } from 'react';
 import { useMapContext } from './MapContext';
+import "./SearchBar.css";
 
 const SearchBar = () => {
   const { onSearch } = useMapContext();
@@ -12,14 +12,14 @@ const SearchBar = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
+    <form className={"search-section"} onSubmit={handleSubmit}>
+      <input className="search-bar"
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search locations"
       />
-      <button type="submit">Search</button>
+      <button className="search-button" type="submit">Search</button>
     </form>
   );
 };

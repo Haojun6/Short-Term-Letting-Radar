@@ -2,6 +2,7 @@
   font-family: 'Arial', sans-serif;
   margin-right: 20px;
   margin-top: 20px;
+
 }
 
 .filter-section {
@@ -11,30 +12,37 @@
 .filter-dropdown select {
   padding: 5px;
   margin-left: 10px;
+  border-radius: 5px;
+}
+.filter-dropdown select:hover {
+  background-color: #61dafb;
 }
 
 .stats-section {
   padding: 20px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 10px;
   margin-left: 20px;
+  background-color: white;
+  box-shadow: 0 1px 5px black;
 }
 
 .total-listings {
-  font-size: 24px;
+  font-size: 18px;
   font-weight: bold;
   color: #333;
   margin-bottom: 20px;
-  padding: 10px 100px;
+  padding: 0px 50px 0px 0px;
+  white-space: nowrap;
 }
 
 .room-type-section
-/* Add classes for other statistic types as needed */ {
+{
   margin-bottom: 20px;
 }
 
 .rent-pressure-bar, .room-type-bar, .illegal-total-bar, .illegal-rpz-bar
-/* Add classes for bars for other statistic types as needed */ {
+{
   background-color: #f4f4f4;
   position: relative;
   height: 20px;
@@ -42,12 +50,20 @@
 }
 
 .bar {
-  background-color: #FF5A5F; /* Airbnb red color */
+  background-color: #FF5A5F;
   height: 100%;
   position: absolute;
   left: 0;
   top: 0;
   transition: width 0.5s ease;
+  transition: transform 0.3s ease;
+  transition: background-color 0.3s;
+  border-radius: 5px;
+}
+
+.bar:hover {
+  background-color: dodgerblue;
+  transform: scale(1.1);
 }
 
 .percentage {
@@ -59,9 +75,11 @@
   font-weight: bold;
 }
 
-.room-type-label {
+.label {
   margin-right: 10px;
   font-weight: bold;
+  text-align: right;
+
 }
 
 .total-number{
